@@ -5,7 +5,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/mcpx.svg)](https://pypi.org/project/mcpx/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/LakshmiSravya123/mcpx/actions/workflows/ci.yml/badge.svg)](https://github.com/LakshmiSravya123/mcpx/actions)
+[![CI](https://github.com/LakshmiSravyaVedantham/mcpx/actions/workflows/ci.yml/badge.svg)](https://github.com/LakshmiSravyaVedantham/mcpx/actions)
 
 ---
 
@@ -158,7 +158,7 @@ Contributions welcome! To add a new server to the registry:
 ## Development
 
 ```bash
-git clone https://github.com/LakshmiSravya123/mcpx.git
+git clone https://github.com/LakshmiSravyaVedantham/mcpx.git
 cd mcpx
 python -m venv venv && source venv/bin/activate
 pip install -e ".[dev]"

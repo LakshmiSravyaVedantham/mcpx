@@ -50,9 +50,9 @@ dev = [
 mcpx = "mcpx.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/LakshmiSravya123/mcpx"
-Repository = "https://github.com/LakshmiSravya123/mcpx"
-Issues = "https://github.com/LakshmiSravya123/mcpx/issues"
+Homepage = "https://github.com/LakshmiSravyaVedantham/mcpx"
+Repository = "https://github.com/LakshmiSravyaVedantham/mcpx"
+Issues = "https://github.com/LakshmiSravyaVedantham/mcpx/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/mcpx"]
