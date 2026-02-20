@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 import os
 import platform
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 CONFIG_FILE_NAME = ".mcp.json"
 
@@ -39,19 +39,67 @@ def get_claude_code_config_path() -> Path:
 def get_cursor_config_path() -> Path:
     os_name = _detect_os()
     if os_name == "macos":
-        return _home() / "Library" / "Application Support" / "Cursor" / "User" / "globalStorage" / "cursor.mcp" / "mcp.json"
+        return (
+            _home()
+            / "Library"
+            / "Application Support"
+            / "Cursor"
+            / "User"
+            / "globalStorage"
+            / "cursor.mcp"
+            / "mcp.json"
+        )
     elif os_name == "windows":
-        return Path(os.environ.get("APPDATA", "")) / "Cursor" / "User" / "globalStorage" / "cursor.mcp" / "mcp.json"
-    return _home() / ".config" / "Cursor" / "User" / "globalStorage" / "cursor.mcp" / "mcp.json"
+        return (
+            Path(os.environ.get("APPDATA", ""))
+            / "Cursor"
+            / "User"
+            / "globalStorage"
+            / "cursor.mcp"
+            / "mcp.json"
+        )
+    return (
+        _home()
+        / ".config"
+        / "Cursor"
+        / "User"
+        / "globalStorage"
+        / "cursor.mcp"
+        / "mcp.json"
+    )
 
 
 def get_vscode_config_path() -> Path:
     os_name = _detect_os()
     if os_name == "macos":
-        return _home() / "Library" / "Application Support" / "Code" / "User" / "globalStorage" / "vscode.mcp" / "mcp.json"
+        return (
+            _home()
+            / "Library"
+            / "Application Support"
+            / "Code"
+            / "User"
+            / "globalStorage"
+            / "vscode.mcp"
+            / "mcp.json"
+        )
     elif os_name == "windows":
-        return Path(os.environ.get("APPDATA", "")) / "Code" / "User" / "globalStorage" / "vscode.mcp" / "mcp.json"
-    return _home() / ".config" / "Code" / "User" / "globalStorage" / "vscode.mcp" / "mcp.json"
+        return (
+            Path(os.environ.get("APPDATA", ""))
+            / "Code"
+            / "User"
+            / "globalStorage"
+            / "vscode.mcp"
+            / "mcp.json"
+        )
+    return (
+        _home()
+        / ".config"
+        / "Code"
+        / "User"
+        / "globalStorage"
+        / "vscode.mcp"
+        / "mcp.json"
+    )
 
 
 def get_project_config_path() -> Path:
@@ -63,25 +111,31 @@ def detect_platforms() -> list[Platform]:
     platforms = []
 
     claude_path = get_claude_code_config_path()
-    platforms.append(Platform(
-        name="Claude Code",
-        config_path=claude_path,
-        exists=claude_path.exists(),
-    ))
+    platforms.append(
+        Platform(
+            name="Claude Code",
+            config_path=claude_path,
+            exists=claude_path.exists(),
+        )
+    )
 
     cursor_path = get_cursor_config_path()
-    platforms.append(Platform(
-        name="Cursor",
-        config_path=cursor_path,
-        exists=cursor_path.parent.exists(),
-    ))
+    platforms.append(
+        Platform(
+            name="Cursor",
+            config_path=cursor_path,
+            exists=cursor_path.parent.exists(),
+        )
+    )
 
     project_path = get_project_config_path()
-    platforms.append(Platform(
-        name="Project (.mcp.json)",
-        config_path=project_path,
-        exists=project_path.exists(),
-    ))
+    platforms.append(
+        Platform(
+            name="Project (.mcp.json)",
+            config_path=project_path,
+            exists=project_path.exists(),
+        )
+    )
 
     return platforms
 

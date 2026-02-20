@@ -80,20 +80,22 @@ class Registry:
         self._categories = data.get("categories", {})
 
         for entry in data.get("servers", []):
-            self._servers.append(ServerInfo(
-                name=entry["name"],
-                description=entry["description"],
-                package=entry["package"],
-                install_type=entry["install_type"],
-                command=entry["command"],
-                args=entry["args"],
-                env=entry.get("env", {}),
-                config_params=entry.get("config_params", {}),
-                category=entry["category"],
-                tags=entry.get("tags", []),
-                official=entry.get("official", False),
-                stars=entry.get("stars", 0),
-            ))
+            self._servers.append(
+                ServerInfo(
+                    name=entry["name"],
+                    description=entry["description"],
+                    package=entry["package"],
+                    install_type=entry["install_type"],
+                    command=entry["command"],
+                    args=entry["args"],
+                    env=entry.get("env", {}),
+                    config_params=entry.get("config_params", {}),
+                    category=entry["category"],
+                    tags=entry.get("tags", []),
+                    official=entry.get("official", False),
+                    stars=entry.get("stars", 0),
+                )
+            )
 
     @property
     def servers(self) -> list[ServerInfo]:
@@ -113,7 +115,6 @@ class Registry:
     def search(self, query: str) -> list[ServerInfo]:
         """Search servers by name, description, or tags."""
         query_lower = query.lower()
-        results: list[ServerInfo] = []
         scored: list[tuple[int, ServerInfo]] = []
 
         for server in self._servers:

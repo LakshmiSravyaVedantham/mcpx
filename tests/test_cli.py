@@ -69,7 +69,10 @@ class TestCLI:
         config.write_text('{"mcpServers": {}}')
 
         # Install
-        result = runner.invoke(app, ["install", "filesystem", "--config", str(config), "--param", "path=/tmp"])
+        result = runner.invoke(
+            app,
+            ["install", "filesystem", "--config", str(config), "--param", "path=/tmp"],
+        )
         assert result.exit_code == 0
         assert "Installed" in result.output
 
@@ -78,13 +81,17 @@ class TestCLI:
         assert "filesystem" in result.output
 
         # Uninstall
-        result = runner.invoke(app, ["uninstall", "filesystem", "--config", str(config)])
+        result = runner.invoke(
+            app, ["uninstall", "filesystem", "--config", str(config)]
+        )
         assert result.exit_code == 0
 
     def test_install_not_found(self, tmp_path):
         config = tmp_path / "mcp.json"
         config.write_text('{"mcpServers": {}}')
-        result = runner.invoke(app, ["install", "nonexistent-server-xyz", "--config", str(config)])
+        result = runner.invoke(
+            app, ["install", "nonexistent-server-xyz", "--config", str(config)]
+        )
         assert result.exit_code == 1
 
     def test_doctor(self, tmp_path):

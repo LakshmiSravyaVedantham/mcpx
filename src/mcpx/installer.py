@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 import shutil
-import subprocess
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 from mcpx.config import add_server_to_config, remove_server_from_config
 from mcpx.registry import ServerInfo

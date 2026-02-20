@@ -9,14 +9,12 @@ import typer
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from rich.text import Text
 
 from mcpx import __version__
 from mcpx.config import (
     detect_platforms,
     get_default_config_path,
     get_installed_servers,
-    read_config,
     write_config,
 )
 from mcpx.doctor import run_diagnostics
@@ -31,7 +29,11 @@ app = typer.Typer(
 )
 console = Console()
 
-STATUS_ICONS = {"ok": "[green]✓[/green]", "warning": "[yellow]![/yellow]", "error": "[red]✗[/red]"}
+STATUS_ICONS = {
+    "ok": "[green]✓[/green]",
+    "warning": "[yellow]![/yellow]",
+    "error": "[red]✗[/red]",
+}
 
 
 def _get_config_path(config: Optional[str]) -> Path:
@@ -53,7 +55,12 @@ def version_callback(value: bool) -> None:
 @app.callback()
 def main(
     version: bool = typer.Option(
-        False, "--version", "-v", help="Show version and exit.", callback=version_callback, is_eager=True,
+        False,
+        "--version",
+        "-v",
+        help="Show version and exit.",
+        callback=version_callback,
+        is_eager=True,
     ),
 ) -> None:
     """mcpx — The package manager for MCP servers."""
@@ -62,7 +69,9 @@ def main(
 @app.command()
 def search(
     query: str = typer.Argument(..., help="Search query (name, description, or tag)"),
-    config: Optional[str] = typer.Option(None, "--config", "-c", help="Config file path"),
+    config: Optional[str] = typer.Option(
+        None, "--config", "-c", help="Config file path"
+    ),
 ) -> None:
     """Search the MCP server registry."""
     registry = _get_registry()
@@ -70,7 +79,9 @@ def search(
 
     if not results:
         console.print(f"[yellow]No servers found for '{query}'[/yellow]")
-        console.print("Try a broader search or run [bold]mcpx top[/bold] to see popular servers.")
+        console.print(
+            "Try a broader search or run [bold]mcpx top[/bold] to see popular servers."
+        )
         raise typer.Exit(1)
 
     table = Table(title=f"Search results for '{query}'", show_lines=False)
@@ -91,14 +102,20 @@ def search(
         table.add_row(name, server.description, server.category, stars)
 
     console.print(table)
-    console.print(f"\n[dim]Found {len(results)} server(s). Install with:[/dim] [bold]mcpx install <name>[/bold]")
+    console.print(
+        f"\n[dim]Found {len(results)} server(s). Install with:[/dim] [bold]mcpx install <name>[/bold]"
+    )
 
 
 @app.command()
 def install(
     name: str = typer.Argument(..., help="Server name to install"),
-    config: Optional[str] = typer.Option(None, "--config", "-c", help="Config file path"),
-    param: Optional[list[str]] = typer.Option(None, "--param", "-p", help="Parameters as key=value"),
+    config: Optional[str] = typer.Option(
+        None, "--config", "-c", help="Config file path"
+    ),
+    param: Optional[list[str]] = typer.Option(
+        None, "--param", "-p", help="Parameters as key=value"
+    ),
 ) -> None:
     """Install an MCP server."""
     registry = _get_registry()
@@ -133,7 +150,8 @@ def install(
 
     # Check for required params
     required_params = {
-        k: v for k, v in server.config_params.items()
+        k: v
+        for k, v in server.config_params.items()
         if v.get("required", False) and k not in params
     }
     if required_params:
@@ -147,13 +165,15 @@ def install(
     success, message = install_server(server, config_path, params)
 
     if success:
-        console.print(Panel(
-            f"[green]✓[/green] {message}\n\n"
-            f"[dim]Config:[/dim] {config_path}\n"
-            f"[dim]Restart your AI tool to activate.[/dim]",
-            title="[bold green]Installed[/bold green]",
-            border_style="green",
-        ))
+        console.print(
+            Panel(
+                f"[green]✓[/green] {message}\n\n"
+                f"[dim]Config:[/dim] {config_path}\n"
+                f"[dim]Restart your AI tool to activate.[/dim]",
+                title="[bold green]Installed[/bold green]",
+                border_style="green",
+            )
+        )
     else:
         console.print(f"[red]✗ {message}[/red]")
         raise typer.Exit(1)
@@ -162,7 +182,9 @@ def install(
 @app.command()
 def uninstall(
     name: str = typer.Argument(..., help="Server name to uninstall"),
-    config: Optional[str] = typer.Option(None, "--config", "-c", help="Config file path"),
+    config: Optional[str] = typer.Option(
+        None, "--config", "-c", help="Config file path"
+    ),
 ) -> None:
     """Uninstall an MCP server."""
     config_path = _get_config_path(config)
@@ -177,7 +199,9 @@ def uninstall(
 
 @app.command(name="list")
 def list_servers(
-    config: Optional[str] = typer.Option(None, "--config", "-c", help="Config file path"),
+    config: Optional[str] = typer.Option(
+        None, "--config", "-c", help="Config file path"
+    ),
 ) -> None:
     """List installed MCP servers."""
     config_path = _get_config_path(config)
@@ -185,7 +209,9 @@ def list_servers(
 
     if not servers:
         console.print("[yellow]No MCP servers installed.[/yellow]")
-        console.print("Run [bold]mcpx search <query>[/bold] or [bold]mcpx top[/bold] to find servers.")
+        console.print(
+            "Run [bold]mcpx search <query>[/bold] or [bold]mcpx top[/bold] to find servers."
+        )
         return
 
     table = Table(title=f"Installed MCP Servers ({config_path})", show_lines=False)
@@ -241,18 +267,22 @@ def info(
         for env_key, env_val in server.env.items():
             content += f"  [cyan]{env_key}[/cyan] = {env_val}\n"
 
-    console.print(Panel(
-        content,
-        title=f"[bold cyan]{server.name}[/bold cyan]{official}{stars}",
-        border_style="cyan",
-    ))
+    console.print(
+        Panel(
+            content,
+            title=f"[bold cyan]{server.name}[/bold cyan]{official}{stars}",
+            border_style="cyan",
+        )
+    )
 
     console.print(f"\nInstall: [bold]mcpx install {server.name}[/bold]")
 
 
 @app.command()
 def doctor(
-    config: Optional[str] = typer.Option(None, "--config", "-c", help="Config file path"),
+    config: Optional[str] = typer.Option(
+        None, "--config", "-c", help="Config file path"
+    ),
 ) -> None:
     """Diagnose MCP configuration issues."""
     config_path = _get_config_path(config)
@@ -275,7 +305,9 @@ def doctor(
 
     console.print()
     if errors:
-        console.print(f"[red bold]{errors} error(s)[/red bold], {warnings} warning(s), {ok} ok")
+        console.print(
+            f"[red bold]{errors} error(s)[/red bold], {warnings} warning(s), {ok} ok"
+        )
     elif warnings:
         console.print(f"[yellow]{warnings} warning(s)[/yellow], {ok} ok")
     else:
@@ -300,10 +332,16 @@ def top(
     for i, server in enumerate(servers, 1):
         official = " ✓" if server.official else ""
         stars = f"★ {server.stars}" if server.stars else ""
-        table.add_row(str(i), f"{server.name}{official}", server.description, server.category, stars)
+        table.add_row(
+            str(i),
+            f"{server.name}{official}",
+            server.description,
+            server.category,
+            stars,
+        )
 
     console.print(table)
-    console.print(f"\nInstall: [bold]mcpx install <name>[/bold]")
+    console.print("\nInstall: [bold]mcpx install <name>[/bold]")
 
 
 @app.command()
@@ -321,7 +359,7 @@ def categories() -> None:
         table.add_row(cat, str(count))
 
     console.print(table)
-    console.print(f"\nBrowse: [bold]mcpx browse <category>[/bold]")
+    console.print("\nBrowse: [bold]mcpx browse <category>[/bold]")
 
 
 @app.command()
@@ -352,7 +390,9 @@ def browse(
 
 @app.command()
 def init(
-    config: Optional[str] = typer.Option(None, "--config", "-c", help="Config file path"),
+    config: Optional[str] = typer.Option(
+        None, "--config", "-c", help="Config file path"
+    ),
 ) -> None:
     """Initialize a new MCP config file."""
     config_path = _get_config_path(config)

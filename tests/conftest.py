@@ -18,19 +18,28 @@ def tmp_config(tmp_path: Path) -> Path:
 def tmp_config_with_servers(tmp_path: Path) -> Path:
     """Create a temporary MCP config with some servers."""
     config_path = tmp_path / "mcp.json"
-    config_path.write_text(json.dumps({
-        "mcpServers": {
-            "filesystem": {
-                "command": "npx",
-                "args": ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"],
+    config_path.write_text(
+        json.dumps(
+            {
+                "mcpServers": {
+                    "filesystem": {
+                        "command": "npx",
+                        "args": [
+                            "-y",
+                            "@modelcontextprotocol/server-filesystem",
+                            "/tmp",
+                        ],
+                    },
+                    "github": {
+                        "command": "npx",
+                        "args": ["-y", "@modelcontextprotocol/server-github"],
+                        "env": {"GITHUB_TOKEN": "test-token"},
+                    },
+                }
             },
-            "github": {
-                "command": "npx",
-                "args": ["-y", "@modelcontextprotocol/server-github"],
-                "env": {"GITHUB_TOKEN": "test-token"},
-            },
-        }
-    }, indent=2))
+            indent=2,
+        )
+    )
     return config_path
 
 

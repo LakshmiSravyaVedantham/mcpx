@@ -43,7 +43,9 @@ class TestInstallServer:
                 "token": {"description": "Token"},
             },
         )
-        success, msg = install_server(server, tmp_config, {"path": "/data", "token": "xyz"})
+        success, msg = install_server(
+            server, tmp_config, {"path": "/data", "token": "xyz"}
+        )
         assert success
         data = json.loads(tmp_config.read_text())
         entry = data["mcpServers"]["test-server"]
