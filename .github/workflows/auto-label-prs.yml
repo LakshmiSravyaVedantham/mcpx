@@ -1,0 +1,118 @@
+name: Auto-Label PRs
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: files
+        run: |
+          FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD || true)
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$FILES" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Determine labels
+        id: labels
+        run: |
+          FILES="${{ steps.files.outputs.files }}"
+          LABELS=""
+
+          # Check for new server entries in registry_data.json
+          if echo "$FILES" | grep -q "registry_data.json"; then
+            # Check if there are new entries (more servers than before)
+            if git diff origin/${{ github.base_ref }}...HEAD -- src/mcpx/registry_data.json | grep -q '^\+.*"name"'; then
+              LABELS="${LABELS}new-server,"
+            fi
+          fi
+
+          # Check if only .py files changed (bug fix)
+          PY_ONLY=true
+          NON_PY=false
+          HAS_PY=false
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            if [[ "$file" == *.py ]]; then
+              HAS_PY=true
+            else
+              PY_ONLY=false
+            fi
+          done <<< "$FILES"
+          if [ "$PY_ONLY" = true ] && [ "$HAS_PY" = true ]; then
+            LABELS="${LABELS}bug-fix,"
+          fi
+
+          # Check if only .md files changed (docs)
+          MD_ONLY=true
+          HAS_MD=false
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            if [[ "$file" == *.md ]]; then
+              HAS_MD=true
+            else
+              MD_ONLY=false
+            fi
+          done <<< "$FILES"
+          if [ "$MD_ONLY" = true ] && [ "$HAS_MD" = true ]; then
+            LABELS="${LABELS}docs,"
+          fi
+
+          # Check if .github/ files changed (ci)
+          if echo "$FILES" | grep -q "^\.github/"; then
+            LABELS="${LABELS}ci,"
+          fi
+
+          # Remove trailing comma
+          LABELS="${LABELS%,}"
+          echo "labels=$LABELS" >> "$GITHUB_OUTPUT"
+
+      - name: Apply labels
+        if: steps.labels.outputs.labels != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = '${{ steps.labels.outputs.labels }}'.split(',').filter(l => l);
+            if (labels.length > 0) {
+              // Ensure labels exist
+              for (const label of labels) {
+                try {
+                  await github.rest.issues.getLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label,
+                  });
+                } catch (e) {
+                  // Label doesn't exist, create it
+                  const colors = {
+                    'new-server': '0E8A16',
+                    'bug-fix': 'D93F0B',
+                    'docs': '0075CA',
+                    'ci': 'FBCA04',
+                  };
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label,
+                    color: colors[label] || 'EDEDED',
+                  });
+                }
+              }
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: labels,
+              });
+            }

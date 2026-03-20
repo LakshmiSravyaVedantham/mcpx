@@ -1,0 +1,71 @@
+name: Validate Registry
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/mcpx/registry_data.json"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate registry_data.json
+        run: |
+          python -c "
+          import json
+          import sys
+
+          REQUIRED_FIELDS = [
+              'name', 'description', 'package', 'install_type',
+              'command', 'args', 'category', 'tags',
+          ]
+
+          with open('src/mcpx/registry_data.json') as f:
+              data = json.load(f)
+
+          servers = data.get('servers', [])
+          if not servers:
+              print('ERROR: No servers found in registry')
+              sys.exit(1)
+
+          errors = []
+          names_seen = set()
+
+          for i, server in enumerate(servers):
+              # Check required fields
+              for field in REQUIRED_FIELDS:
+                  if field not in server:
+                      errors.append(f'Server #{i} ({server.get(\"name\", \"UNKNOWN\")}): missing required field \"{field}\"')
+                  elif not server[field] and field not in ('tags',):
+                      errors.append(f'Server #{i} ({server[\"name\"]}): field \"{field}\" is empty')
+
+              # Check for duplicate names
+              name = server.get('name', '')
+              if name in names_seen:
+                  errors.append(f'Server #{i}: duplicate name \"{name}\"')
+              names_seen.add(name)
+
+              # Validate field types
+              if 'args' in server and not isinstance(server['args'], list):
+                  errors.append(f'Server \"{name}\": \"args\" must be a list')
+              if 'tags' in server and not isinstance(server['tags'], list):
+                  errors.append(f'Server \"{name}\": \"tags\" must be a list')
+              if 'install_type' in server and server['install_type'] not in ('npm', 'pip', 'binary'):
+                  errors.append(f'Server \"{name}\": invalid install_type \"{server[\"install_type\"]}\"')
+
+          if errors:
+              print('Registry validation FAILED:')
+              for err in errors:
+                  print(f'  - {err}')
+              sys.exit(1)
+          else:
+              print(f'Registry validation passed: {len(servers)} servers, all valid.')
+          "
