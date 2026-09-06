@@ -11,7 +11,7 @@
 
 ## What is mcpx?
 
-**mcpx** is like `npm` or `brew` — but for MCP servers. It provides a curated registry of **50+ MCP servers** and lets you install them into Claude Code, Cursor, or VS Code with a single command.
+**mcpx** is like `npm` or `brew` -- but for MCP servers. It provides a curated registry of **51+ MCP servers** and lets you install them into Claude Code, Cursor, or VS Code with a single command.
 
 No more manually editing JSON config files. No more hunting for package names. Just:
 
@@ -44,13 +44,13 @@ mcpx doctor
 
 ## Features
 
-- **50+ curated MCP servers** across 21 categories (database, devtools, cloud, AI, etc.)
-- **One-command install** — `mcpx install <name>` writes the config for you
+- **51+ curated MCP servers** across 21 categories (database, devtools, cloud, AI, etc.)
+- **One-command install** -- `mcpx install <name>` writes the config for you
 - **Auto-detects** Claude Code, Cursor, and VS Code configurations
-- **Smart search** — find servers by name, description, or tags
-- **Doctor command** — diagnose configuration issues
+- **Smart search** -- find servers by name, description, or tags
+- **Doctor command** -- diagnose configuration issues
 - **Beautiful CLI** powered by Rich and Typer
-- **Zero config** — works out of the box with sensible defaults
+- **Zero config** -- works out of the box with sensible defaults
 
 ## Commands
 
@@ -74,48 +74,18 @@ mcpx doctor
 
 ```bash
 $ mcpx search database
-┌─────────────────────────────────────────────────────┐
-│ Search results for 'database'                       │
-├──────────┬──────────────────────┬──────────┬────────┤
-│ Name     │ Description          │ Category │ Stars  │
-├──────────┼──────────────────────┼──────────┼────────┤
-│ postgres │ PostgreSQL database  │ database │ ★ 4200 │
-│ sqlite   │ SQLite database      │ database │ ★ 3800 │
-│ mysql    │ MySQL database       │ database │ ★ 2100 │
-│ mongodb  │ MongoDB database     │ database │ ★ 1800 │
-│ redis    │ Redis key-value      │ database │ ★ 2500 │
-└──────────┴──────────────────────┴──────────┴────────┘
 ```
 
 ### Install a server with parameters
 
 ```bash
 $ mcpx install postgres --param connection_string=postgresql://localhost/mydb
-╭──────────── Installed ────────────╮
-│ ✓ Server 'postgres' installed     │
-│                                   │
-│ Config: ~/.claude.json            │
-│ Restart your AI tool to activate. │
-╰───────────────────────────────────╯
 ```
 
 ### Check your setup
 
 ```bash
 $ mcpx doctor
-╭── MCP Configuration Doctor ──╮
-│                               │
-│ ✓ Config file: Found          │
-│ ✓ Valid JSON                  │
-│ ✓ MCP servers: 3 configured  │
-│ ✓ npx available              │
-│ ✓ Node.js v20.11.0           │
-│ ! Server 'slack': Unconfigured│
-│   env vars: SLACK_TOKEN       │
-│ ✓ Platforms: Claude Code      │
-│                               │
-│ 5 ok, 1 warning              │
-╰───────────────────────────────╯
 ```
 
 ## Supported Platforms
@@ -129,23 +99,87 @@ mcpx auto-detects and writes config for:
 
 ## Registry
 
-The built-in registry includes 50+ servers across these categories:
+The built-in registry includes 51+ servers across these categories:
 
 | Category | Examples |
 |----------|----------|
-| Database | PostgreSQL, SQLite, MySQL, MongoDB, Redis |
-| DevTools | GitHub, Docker, Kubernetes, Terminal |
-| Communication | Slack, Discord, Gmail, Twilio |
-| Search | Brave Search, Tavily, Google |
-| Cloud | AWS, Azure, GCP, Cloudflare |
-| AI | OpenAI, Anthropic, Sequential Thinking |
-| Monitoring | Sentry, Datadog, Grafana |
-| Productivity | Notion, Linear, Todoist, Airtable |
-| Web | Fetch, Firecrawl, Puppeteer, Playwright |
+| AI & ML | Openai, Pinecone, Anthropic |
+| Browser Automation | Puppeteer, Playwright |
+| Cloud Providers | Aws, Cloudflare, Azure, Gcp |
+| Communication | Slack, Twilio, Discord, Gmail |
+| CRM | Hubspot |
+| Databases | Postgres, Sqlite, Redis, Mysql, Mongodb, ... |
+| Deployment | Vercel |
 | Design | Figma |
-| CRM | HubSpot |
+| Developer Tools | Github, Docker, Kubernetes, Terminal, Context7 |
+| E-Commerce | Shopify |
+| Filesystem | Filesystem |
+| Location & Maps | Google Maps |
+| Memory & Context | Memory |
+| Monitoring | Sentry, Grafana, Datadog |
 | Payments | Stripe |
-| And more... | 21 categories total |
+| Productivity | Notion, Todoist, Confluence, Google Drive |
+| Project Management | Linear, Jira |
+| Reasoning | Sequential Thinking |
+| Search | Brave Search, Tavily |
+| Utilities | Time |
+| Web & Scraping | Fetch, Firecrawl |
+
+## All Servers
+
+| Name | Description | Category | Stars |
+|------|-------------|----------|-------|
+| filesystem ⭐ | Read, write, and manage files on your local filesystem | filesystem | 90,108 |
+| memory ⭐ | Persistent memory using a local knowledge graph for long-term context | memory | 90,108 |
+| sequential-thinking ⭐ | Break down complex problems into sequential thinking steps | reasoning | 90,108 |
+| context7 | Pull up-to-date documentation and code examples for any library | devtools | 61,686 |
+| playwright | Automate browsers with Playwright for testing and scraping | browser | 36,843 |
+| firecrawl | Crawl and scrape websites with Firecrawl for LLM-ready content | web | 7,407 |
+| github ⭐ | Interact with GitHub repositories, issues, PRs, and more | devtools | 6,500 |
+| puppeteer ⭐ | Automate browser interactions, take screenshots, and scrape web pages | browser | 4,500 |
+| postgres ⭐ | Query and manage PostgreSQL databases with read-only or read-write access | database | 4,200 |
+| sqlite ⭐ | Query and manage SQLite databases | database | 3,800 |
+| slack ⭐ | Send messages, manage channels, and interact with Slack workspaces | communication | 3,200 |
+| fetch ⭐ | Fetch and extract content from URLs and web pages | web | 3,100 |
+| brave-search ⭐ | Search the web using Brave Search API | search | 2,800 |
+| stripe | Manage Stripe payments, customers, subscriptions, and invoices | payments | 2,500 |
+| google-maps ⭐ | Search places, get directions, and geocode addresses via Google Maps | location | 2,400 |
+| tavily | AI-optimized web search and research with Tavily API | search | 2,370 |
+| openai | Use OpenAI models (GPT-4, DALL-E, Whisper) from within your AI assistant | ai | 2,200 |
+| mysql | Query and manage MySQL databases | database | 2,106 |
+| aws | Interact with AWS services including S3, EC2, Lambda, and more | cloud | 2,100 |
+| notion | Search, read, and manage Notion pages, databases, and blocks | productivity | 1,900 |
+| docker | Manage Docker containers, images, volumes, and networks | devtools | 1,800 |
+| anthropic | Use Anthropic Claude API directly as an MCP server | ai | 1,800 |
+| supabase | Manage Supabase projects, databases, and edge functions | database | 1,600 |
+| kubernetes | Manage Kubernetes clusters, pods, deployments, and services | devtools | 1,576 |
+| cloudflare | Manage Cloudflare Workers, KV, R2, and DNS | cloud | 1,500 |
+| vercel | Manage Vercel deployments, domains, and environment variables | deployment | 1,400 |
+| redis | Interact with Redis databases for caching and data storage | database | 1,200 |
+| figma | Access Figma designs, components, and design tokens | design | 1,200 |
+| mongodb | Query and manage MongoDB databases and collections | database | 1,100 |
+| grafana | Query Grafana dashboards, alerts, and datasources | monitoring | 1,100 |
+| gmail | Read and send Gmail messages | communication | 1,100 |
+| jira | Manage Jira issues, sprints, and project boards | project-management | 1,000 |
+| pinecone | Manage Pinecone vector databases for AI/ML applications | ai | 900 |
+| datadog | Query Datadog metrics, monitors, and APM traces | monitoring | 900 |
+| google-drive | Search, read, and manage Google Drive files | productivity | 900 |
+| sentry | Query Sentry issues, events, and error monitoring data | monitoring | 843 |
+| elasticsearch | Search and manage Elasticsearch indices and documents | database | 800 |
+| discord | Send messages and manage Discord servers and channels | communication | 800 |
+| azure | Manage Azure cloud resources, deployments, and services | cloud | 800 |
+| time ⭐ | Get current time, convert timezones, and manage time-related operations | utilities | 800 |
+| twilio | Send SMS, make calls, and manage Twilio communications | communication | 700 |
+| confluence | Search and manage Confluence pages and spaces | productivity | 700 |
+| snowflake | Query and manage Snowflake data warehouse | database | 700 |
+| gcp | Manage Google Cloud Platform resources and services | cloud | 700 |
+| todoist | Manage Todoist tasks, projects, and labels | productivity | 600 |
+| bigquery | Query Google BigQuery datasets and tables | database | 600 |
+| airtable | Read and manage Airtable bases, tables, and records | database | 500 |
+| hubspot | Manage HubSpot CRM contacts, deals, and companies | crm | 500 |
+| terminal | Execute shell commands and terminal operations securely | devtools | 19 |
+| linear | Manage Linear issues, projects, and workflows | project-management | 2 |
+| shopify | Manage Shopify stores, products, and orders | ecommerce | 0 |
 
 ## Contributing
 
@@ -167,7 +201,7 @@ pytest
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License -- see [LICENSE](LICENSE) for details.
 
 ## What is MCP?
 

@@ -1,0 +1,43 @@
+Packages no longer on npm:
+  - sqlite
+  - fetch
+  - mongodb
+  - docker
+  - stripe
+  - supabase
+  - grafana
+  - twilio
+  - todoist
+  - figma
+  - datadog
+  - google-drive
+  - snowflake
+  - bigquery
+  - hubspot
+  - time
+
+Deprecated packages:
+  - postgres: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+  - github: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+  - slack: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+  - brave-search: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+  - puppeteer: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+  - google-maps: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+  - elasticsearch: This package is deprecated. Please use @elastic/mcp-server-elasticsearch instead.
+
+Star count updates:
+  - filesystem: 90,108
+  - memory: 90,108
+  - sequential-thinking: 90,108
+  - mysql: 2,106
+  - kubernetes: 1,576
+  - linear: 2
+  - sentry: 843
+  - playwright: 36,843
+  - tavily: 2,370
+  - firecrawl: 7,407
+  - shopify: 0
+  - terminal: 19
+  - context7: 61,686
+
+Registry updated with new star counts.
